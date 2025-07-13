@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,19 @@ public class SettingsMenuController : MonoBehaviour
     private int selectedGrid;
     public GridButtons[] gridButtons;
 
+    public Color gridSelectedColor;
+
+    private void Start()
+    {
+        if (!PlayerPrefs.HasKey("SelectedGrid"))
+            SelectedLayout(0);
+        else
+        {
+            SelectedLayout(PlayerPrefs.GetInt("SelectedGrid"));
+        }
+
+    }
+
     public void OpenSettingsMenu()
     {
         SetupScreen();
@@ -21,6 +35,8 @@ public class SettingsMenuController : MonoBehaviour
     public void SetupVolume()
     {      
         PlayerPrefs.SetFloat("Volume", volumeSlider.value);
+
+        SoundManager.instance.AdjustVolume(volumeSlider.value);
     }
 
     public void SelectedGridButton(int index)
@@ -31,7 +47,29 @@ public class SettingsMenuController : MonoBehaviour
         }
         PlayerPrefs.SetInt("SelectedGrid", index);
 
-        gridButtons[index].gridImage.color = Color.green;
+        gridButtons[index].gridImage.color = gridSelectedColor;
+
+        SelectedLayout(index);
+    }
+
+    public void SelectedLayout(int Index)
+    {
+        //PlayerPrefs.SetInt("Layout", Index);
+        if (Index == 0)
+        {
+            Singleton.instance.gameController.rowCount = 2;
+            Singleton.instance.gameController.columnCount = 2;
+        }
+        else if (Index == 1)
+        {
+            Singleton.instance.gameController.rowCount = 2;
+            Singleton.instance.gameController.columnCount = 3;
+        }
+        else if (Index == 2)
+        {
+            Singleton.instance.gameController.rowCount = 5;
+            Singleton.instance.gameController.columnCount = 6;
+        }
     }
 
     public void SetupScreen()

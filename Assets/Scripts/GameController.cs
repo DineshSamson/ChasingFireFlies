@@ -304,7 +304,10 @@ public class GameController : MonoBehaviour
         }
     }
 
+    void Comba()
+    {
 
+    }
 
     void SaveGame()
     {
